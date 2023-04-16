@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,8 +8,8 @@
     <title>Image Forgery Detection</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
         integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-    <link rel="stylesheet" href="../static/stylesheets/style.css">
-    <link rel="stylesheet" href="../static/stylesheets/fullpage.min.css">
+    <link rel="stylesheet" href="{% static 'stylesheets/style.css' %}">
+    <link rel="stylesheet" href="{% static 'stylesheets/fullpage.min.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Lato&family=Open+Sans+Condensed:wght@700&display=swap"
         rel="stylesheet">
     <style>
@@ -128,7 +129,7 @@
                         <h4 id="subtitle1">A DEEP LEARNING APPROACH</h4>
                     </div>
                     <div class="d-none d-lg-block col-lg-6">
-                        <img src="../static/images/s1.svg" width="450" class="img-fluid">
+                        <img src="{% static 'images/s1.svg' %}" width="450" class="img-fluid">
                     </div>
                 </div>
             </div>
@@ -138,7 +139,7 @@
                 <div class="row">
                     <div class="d-none d-lg-block col-lg-7">
                         <center>
-                            <img src="../static/images/s2.svg" width="600" style="padding-top: 50px" class="img-fluid">
+                            <img src="{% static 'images/s2.svg' %}" width="600" style="padding-top: 50px" class="img-fluid">
                         </center>
                     </div>
                     <div class="col-lg-5 col-12">
@@ -148,11 +149,7 @@
                             social
                             media. It potentially conveys a false news or claim with an underlying malicious intent such
                             as
-                            invoking communal violence. Here a deep learning algorithm is being used to identify 385
-                            different
-                            kinds of image forgery using a novel neural network architecture called Manipulation Tracing
-                            Network
-                            (ManTraNet).<br><br>
+                            invoking communal violence.<br><br>
                           
                         </h4>
                     </div>
@@ -168,7 +165,7 @@
                                 <img alt="Image Preview" class="image-preview__image img-fluid"
                                     style="width: auto; max-height: 60vh;">
                             </div>
-                            <form action="/" method="POST" enctype="multipart/form-data">
+                            <form method="POST" enctype="multipart/form-data">{% csrf_token %}
                                 <input type="hidden" name="platform" value="website">
                                 <div class="custom-file col-12">
                                     <input type="file" class="custom-file-input" name="input_image" id="customFile">
@@ -196,7 +193,7 @@
                 <div class="row">
                     
                     <div class="col-md-6 mx-auto d-block">
-                        <img src="../static/images/s3.svg" width="500" class="pt-5 img-fluid">
+                        <img src="{% static 'images/s3.svg' %}" width="500" class="pt-5 img-fluid">
                     </div>
                 </div>
             </div>
@@ -205,7 +202,7 @@
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
         integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
         crossorigin="anonymous"></script>
-    <script src="../static/scripts/fullpage.min.js"></script>
+    <script src="{% static 'scripts/fullpage.min.js' %}"></script>
     <script>
         var fullpage_api = new fullpage('#fullpage', {
             autoScrolling: true,
