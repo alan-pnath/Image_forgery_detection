@@ -19,27 +19,20 @@ def home(request):
 
         fig, ax = plt.subplots(1,2,figsize=(15,5)) 
 
-        #display original image
-        original_image = plt.imread(uploaded_image) 
-        ax[0].axis('off')
-        ax[0].imshow(original_image)
-        ax[0].set_title('Original Image')
-
-        #display ELA applied image
-        ax[1].axis('off')
-        ax[1].imshow(convert_to_ela_image(uploaded_image,90)) 
-        ax[1].set_title('ELA Image')
 
         print(f'Prediction: {class_names[y_pred_class]}')
+        prediction=class_names[y_pred_class]
         if y_pred<=0.5:
             print(f'Confidence:  {(1-(y_pred[0][0])) * 100:0.2f}%')
+            confidence=f'{(1-(y_pred[0][0])) * 100:0.2f}'
         else:
             print(f'Confidence: {(y_pred[0][0]) * 100:0.2f}%')
+            confidence=f'{(y_pred[0][0]) * 100:0.2f}'
         print('--------------------------------------------------------------------------------------------------------------')
-
+        return render(request, 'result.html',{'pred':prediction,'con':confidence})
 
     return render(request, 'base.html')
-
+                                                                                                                                                                            
 def prepare_image(image_path):
     image_size = (128, 128)
     return np.array(convert_to_ela_image(image_path, 90).resize(image_size)).flatten() / 255.0         #normalizing the array values obtained from input image
@@ -50,8 +43,8 @@ def convert_to_ela_image(path,quality):
 
     #resaving input image at the desired quality
     resaved_file_name = 'resaved_image.jpg'     #predefined filename for resaved image
-    original_image.save(resaved_file_name,'JPEG',quality=quality)
-    resaved_image = Image.open(resaved_file_name)
+    original_image.save('static/predicted/resaved_image.jpg','JPEG',quality=quality)
+    resaved_image = Image.open('static/predicted/resaved_image.jpg')
 
     #pixel difference between original and resaved image
     ela_image = ImageChops.difference(original_image,resaved_image)
@@ -66,5 +59,5 @@ def convert_to_ela_image(path,quality):
     #enhancing elaimage to brighten the pixels
     ela_image = ImageEnhance.Brightness(ela_image).enhance(scale)
 
-    ela_image.save("ela_image.png")
+    ela_image.save("static/predicted/ela_image.png")
     return ela_image
