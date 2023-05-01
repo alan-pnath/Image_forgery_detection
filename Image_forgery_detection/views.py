@@ -7,7 +7,7 @@ from PIL import Image, ImageChops, ImageEnhance
 import matplotlib.pyplot as plt
 
 class_names = ['Forged', 'Authentic']
-model=load_model("image-forgery-detection-main/trained_model1.h5")
+model=load_model("train/trained_model1.h5")
 
 def home(request):
     if request.method == 'POST':
@@ -15,9 +15,7 @@ def home(request):
         test_image = prepare_image(uploaded_image)
         test_image = test_image.reshape(-1, 128, 128, 3)
         y_pred = model.predict(test_image)
-        y_pred_class = round(y_pred[0][0])
-
-        fig, ax = plt.subplots(1,2,figsize=(15,5)) 
+        y_pred_class = round(y_pred[0][0]) 
 
 
         print(f'Prediction: {class_names[y_pred_class]}')
@@ -32,6 +30,8 @@ def home(request):
         return render(request, 'result.html',{'pred':prediction,'con':confidence})
 
     return render(request, 'base.html')
+
+
                                                                                                                                                                             
 def prepare_image(image_path):
     image_size = (128, 128)
