@@ -162,13 +162,13 @@
                     <div class=" col-md-6 mx-auto d-block">
                         <h1>ORIGINAL IMAGE</h1>
                         <div class="image-container">
-                            <img src="{% static 'predicted/resaved_image.jpg' %}" alt="Image 1" class="img-fluid">
+                            <img src="{% static 'predicted/resaved_image.jpg' %}" alt="Image 1" class="img-fluid" width="500" height="400">
                         </div>
                     </div>
                     <div class=" col-md-6 mx-auto d-block">
                         <h1>ELA IMAGE</h1>
                         <div class="image-container">
-                            <img src="{% static 'predicted/ela_image.png' %}" alt="Image 2" class="img-fluid">
+                            <img src="{% static 'predicted/ela_image.png' %}" alt="Image 2" class="img-fluid" width="500" height="400">
                         </div>
                     </div>
                     <div class="col-lg-5 col-12">
@@ -177,6 +177,12 @@
                     </div>
                     
                     
+                    
+                </div>
+
+                <div class="col-lg-5 col-12" >
+                    <a href="{% url 'home' %}" class="btn btn-primary">CHECK ANOTHER IMAGE</a>
+
                 </div>
             </div>
         </div>

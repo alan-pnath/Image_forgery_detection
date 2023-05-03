@@ -5,29 +5,49 @@ import numpy as np
 from keras.models import load_model
 from PIL import Image, ImageChops, ImageEnhance
 import matplotlib.pyplot as plt
+import io
+import imghdr
 
 class_names = ['Forged', 'Authentic']
 model=load_model("train/trained_model1.h5")
 
 def home(request):
+    data={}
     if request.method == 'POST':
         uploaded_image = request.FILES['input_image']
-        test_image = prepare_image(uploaded_image)
-        test_image = test_image.reshape(-1, 128, 128, 3)
-        y_pred = model.predict(test_image)
-        y_pred_class = round(y_pred[0][0]) 
+        file_type = imghdr.what(uploaded_image)
+        if file_type is not None:
+            img = Image.open(io.BytesIO(uploaded_image.read()))
+        
+            if img.format in ['JPEG', 'PNG']:
+                test_image = prepare_image(uploaded_image)
+                test_image = test_image.reshape(-1, 128, 128, 3)
+                y_pred = model.predict(test_image)
+                y_pred_class = round(y_pred[0][0]) 
 
 
-        print(f'Prediction: {class_names[y_pred_class]}')
-        prediction=class_names[y_pred_class]
-        if y_pred<=0.5:
-            print(f'Confidence:  {(1-(y_pred[0][0])) * 100:0.2f}%')
-            confidence=f'{(1-(y_pred[0][0])) * 100:0.2f}'
+                print(f'Prediction: {class_names[y_pred_class]}')
+                prediction=class_names[y_pred_class]
+                if y_pred<=0.5:
+                    print(f'Confidence:  {(1-(y_pred[0][0])) * 100:0.2f}%')
+                    confidence=f'{(1-(y_pred[0][0])) * 100:0.2f}'
+                else:
+                    print(f'Confidence: {(y_pred[0][0]) * 100:0.2f}%')
+                    confidence=f'{(y_pred[0][0]) * 100:0.2f}'
+                print('--------------------------------------------------------------------------------------------------------------')
+                return render(request, 'result.html',{'pred':prediction,'con':confidence})
+            else:
+                data['error'] = "Invalid Format. upload JPEG/PNG Formats"
+                res = render(request, 'base.html', data)
+                return res
+                # data = "Invalid Format. upload JPEG/PNG Formats"
+                # render(request,  {'error':data})
         else:
-            print(f'Confidence: {(y_pred[0][0]) * 100:0.2f}%')
-            confidence=f'{(y_pred[0][0]) * 100:0.2f}'
-        print('--------------------------------------------------------------------------------------------------------------')
-        return render(request, 'result.html',{'pred':prediction,'con':confidence})
+            data['error'] = "Invalid Format. upload JPEG/PNG Formats"
+            res = render(request, 'base.html', data)
+            return res
+                # data = "please upload an image file"
+                # render(request, 'base.html', {'error':data})  
 
     return render(request, 'base.html')
 
