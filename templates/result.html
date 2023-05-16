@@ -157,35 +157,50 @@
             </div>
         </div>
         <div class="section">
-            <div class="container" id="textbox3">
+            <div class="container text-center" id="textbox3" style="background-color: rgba(0, 0, 0, .4); border-radius:20px;">
                 <div class="row">
-                    <div class=" col-md-6 mx-auto d-block">
+                    <div class="col-md-4 mb-4">
                         <h1>ORIGINAL IMAGE</h1>
                         <div class="image-container">
                             <img src="{% static 'predicted/resaved_image.jpg' %}" alt="Image 1" class="img-fluid" width="500" height="400">
                         </div>
                     </div>
-                    <div class=" col-md-6 mx-auto d-block">
+                    <div class="col-md-4 mb-4">
                         <h1>ELA IMAGE</h1>
                         <div class="image-container">
                             <img src="{% static 'predicted/ela_image.png' %}" alt="Image 2" class="img-fluid" width="500" height="400">
                         </div>
                     </div>
-                    <div class="col-lg-5 col-12">
-                        <h1 id="title2">PREDICTION:{{pred}}</h1>
-                        <h4 id="subtitle2">CONFIDENCE:{{con}}%</h4>
+                    <div class="col-md-4 mb-4">
+                        <h1>GRAY SCALED IMAGE</h1>
+                        <div class="image-container">
+                            <img src="{% static 'predicted/ela_image_gray.png' %}" alt="Image 3" class="img-fluid" width="500" height="400">
+                        </div>
                     </div>
-                    
-                    
-                    
                 </div>
-
-                <div class="col-lg-5 col-12" >
-                    <a href="{% url 'home' %}" class="btn btn-primary">CHECK ANOTHER IMAGE</a>
-
+                <div class="row">
+                    <div class="col-lg-5 col-md-6 mx-auto" style="font-family: 'Comic Sans MS', 'Comic Sans', cursive; border-radius: 20px; color: white;">
+                        <h3 id="subtitle2" style="font-family: 'Copperplate'; text-transform: uppercase; letter-spacing: 2px; color: white; background-color: rgba(0, 0, 0, 0.7); padding: 10px; border-radius: 10px; box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);">PREDICTION: {{ pred }}</h3>
+                    </div>
                 </div>
+                <div class="row">
+                    <div class="col-lg-5 col-md-6 mx-auto" style="font-family: 'Comic Sans MS', 'Comic Sans', cursive; border-radius: 20px; color: white;">
+                        <h3 id="subtitle2" style="font-family: 'Copperplate'; text-transform: uppercase; letter-spacing: 2px; color: white; background-color: rgba(0, 0, 0, 0.7); padding: 10px; border-radius: 10px; box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);">CONFIDENCE: {{ con }}%</h3>
+
+                    </div>
+                </div>
+                
+                <br>
+                <div class="text-center">
+                    <a href="{% url 'home' %}" class="btn btn-primary" style="font-family: 'Copperplate'; text-transform: uppercase; letter-spacing: 2px; background-color: #FFD700; color: black; border-radius: 30px; padding: 15px 30px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); transition: all 0.3s ease;">CHECK ANOTHER IMAGE</a>
+                </div>
+                
+                <br>
             </div>
         </div>
+        
+        
+        
 
         
         <div class="section">

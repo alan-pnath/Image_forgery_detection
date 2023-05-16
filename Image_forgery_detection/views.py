@@ -13,58 +13,64 @@ from sightengine.client import SightengineClient
 
 
 class_names = ['Forged', 'Authentic']
-model=load_model("train/trained_model1.h5")
+model=load_model("models/trained_model.h5")
 
 def home(request):
     data={}
     if request.method == 'POST':
-        uploaded_image = request.FILES['input_image']
-        file_type = imghdr.what(uploaded_image)
-        if file_type is not None:
-            img = Image.open(io.BytesIO(uploaded_image.read()))
         
-            if img.format in ['JPEG', 'PNG']:
-                test_image = prepare_image(uploaded_image)
-                # params = {
-                # 'models': 'properties,scam',
-                # api_user: '1641196078',
-                # api_secret: 'aLanF9RyfpZowysgemsx'
-                # }
-                # files = {'media': open('static/predicted/ela_image.png', 'rb')}
-                # r = requests.post('https://api.sightengine.com/1.0/check.json', files=files, data=params)
-
-                # output = json.loads(r.text)
-                # print(output)
-                
-                # client = SightengineClient("1641196078", "aLanF9RyfpZowysgemsx")
-                # output = client.check('type').set_file('static/predicted/resaved_image.jpg')
-                # print(output)
-                
-                test_image = test_image.reshape(-1, 128, 128, 3)
-                y_pred = model.predict(test_image)
-                y_pred_class = round(y_pred[0][0]) 
-
-
-                print(f'Prediction: {class_names[y_pred_class]}')
-                prediction=class_names[y_pred_class]
-                if y_pred<=0.5:
-                    print(f'Confidence:  {(1-(y_pred[0][0])) * 100:0.2f}%')
-                    confidence=f'{(1-(y_pred[0][0])) * 100:0.2f}'
-                else:
-                    print(f'Confidence: {(y_pred[0][0]) * 100:0.2f}%')
-                    confidence=f'{(y_pred[0][0]) * 100:0.2f}'
-                print('--------------------------------------------------------------------------------------------------------------')
-                return render(request, 'result.html',{'pred':prediction,'con':confidence})
-            else:
-                data['error'] = "Invalid Format. upload JPEG/PNG Formats"
-                res = render(request, 'base.html', data)
-                return res
-                # data = "Invalid Format. upload JPEG/PNG Formats"
-                # render(request,  {'error':data})
-        else:
-            data['error'] = "please upload an image file"
+        if 'input_image' not in request.FILES:
+            data['error'] = 'No image selected.'
             res = render(request, 'base.html', data)
             return res
+        else:
+            uploaded_image = request.FILES['input_image']
+            file_type = imghdr.what(uploaded_image)
+            if file_type is not None:
+                img = Image.open(io.BytesIO(uploaded_image.read()))
+            
+                if img.format in ['JPEG', 'PNG']:
+                    test_image = prepare_image(uploaded_image)
+                    # params = {
+                    # 'models': 'properties,scam',
+                    # api_user: '1641196078',
+                    # api_secret: 'aLanF9RyfpZowysgemsx'
+                    # }
+                    # files = {'media': open('static/predicted/ela_image.png', 'rb')}
+                    # r = requests.post('https://api.sightengine.com/1.0/check.json', files=files, data=params)
+
+                    # output = json.loads(r.text)
+                    # print(output)
+                    
+                    # client = SightengineClient("1641196078", "aLanF9RyfpZowysgemsx")
+                    # output = client.check('type').set_file('static/predicted/resaved_image.jpg')
+                    # print(output)
+                    
+                    test_image = test_image.reshape(-1, 128, 128, 3)
+                    y_pred = model.predict(test_image)
+                    y_pred_class = round(y_pred[0][0]) 
+
+
+                    print(f'Prediction: {class_names[y_pred_class]}')
+                    prediction=class_names[y_pred_class]
+                    if y_pred<=0.5:
+                        print(f'Confidence:  {(1-(y_pred[0][0])) * 100:0.2f}%')
+                        confidence=f'{(1-(y_pred[0][0])) * 100:0.2f}'
+                    else:
+                        print(f'Confidence: {(y_pred[0][0]) * 100:0.2f}%')
+                        confidence=f'{(y_pred[0][0]) * 100:0.2f}'
+                    print('--------------------------------------------------------------------------------------------------------------')
+                    return render(request, 'result.html',{'pred':prediction,'con':confidence})
+                else:
+                    data['error'] = "Invalid Format. upload JPEG/PNG Formats"
+                    res = render(request, 'base.html', data)
+                    return res
+                    # data = "Invalid Format. upload JPEG/PNG Formats"
+                    # render(request,  {'error':data})
+            else:
+                data['error'] = "please upload an image file"
+                res = render(request, 'base.html', data)
+                return res
                 # data = "please upload an image file"
                 # render(request, 'base.html', {'error':data})  
 
@@ -105,7 +111,15 @@ def convert_to_ela_image(path,quality):
     ela_image = ImageEnhance.Brightness(ela_image).enhance(scale)
 
     ela_image.save("static/predicted/ela_image.png")
+    ela_image_gray = ela_image.convert('L')
+    
+# Save the grayscale image
+    ela_image_gray.save("static/predicted/ela_image_gray.png")
+
+# Save the grayscale map image
+    
     return ela_image
+
 
 # def compute_ela_cv(path, quality):
 #     temp_filename = 'temp_file_name.jpg'
